@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập Lịch Sử 11 - Bài 1 & 2 (Kết Nối Tri Thức)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
+                        history: {
+                            gold: '#f59e0b',
+                            amber: '#d97706',
+                            emerald: '#10b981',
+                            sky: '#0284c7',
+                            slate: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 30%, #f0fdf4 100%);
+            color: #1e293b;
+            min-height: 100vh;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e2e8f0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -5px rgba(59, 130, 246, 0.15);
+        }
+      </style>
+</head>
+<body class="font-sans antialiased flex flex-col h-full selection:bg-brand-500 selection:text-white">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-200/80 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('dashboard')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-emerald-500 to-sky-500 flex items-center justify-center text-white text-xl font-black shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-landmark"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold bg-gradient-to-r from-slate-800 via-emerald-700 to-sky-700 bg-clip-text text-transparent">
+                        ÔN TẬP LỊCH SỬ 11
+                    </h1>
+                    <p class="text-xs font-semibold text-slate-500">Bộ Sách Kết Nối Tri Thức (Bài 1 & 2)</p>
+                </div>
+            </div>
+
+            <!-- Global Status Bar -->
+            <div id="quiz-header-status" class="hidden md:flex items-center gap-6">
+                <div class="flex items-center gap-2 bg-white/90 px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-sm">
+                    <i class="fa-solid fa-clock text-amber-500 text-sm"></i>
+                    <span id="timer-display" class="font-mono text-sm font-bold text-slate-700">00:00</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white/90 px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-sm">
+                    <i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i>
+                    <span class="text-xs font-medium text-slate-500">Tiến độ:</span>
+                    <span id="progress-text" class="text-sm font-bold text-emerald-600">0/40</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="switchView('dashboard')" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold border border-slate-200 shadow-sm transition flex items-center gap-2">
+                    <i class="fa-solid fa-house text-sky-600"></i>
+                    <span class="hidden sm:inline">Trang Chủ</span>
+                </button>
+                <button onclick="toggleSound()" id="btn-sound" class="w-9 h-9 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm transition flex items-center justify-center">
+                    <i class="fa-solid fa-volume-high text-emerald-600" id="sound-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINERS -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- 1. DASHBOARD VIEW -->
+      <section id="view-dashboard" class="space-y-8">
+            <!-- Banner Tân Luyện -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 p-6 sm:p-10 shadow-xl shadow-teal-600/10 text-white">
+                <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-md inline-block border border-white/20">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> Hệ Thống Ôn Tập Tương Tác High-Score
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight">
+                        Chinh Phục Lịch Sử 11 <br/>
+                        <span class="text-amber-300">Cách Mạng Tư Sản & Chủ Nghĩa Tư Bản</span>
+                    </h2>
+                    <p class="text-sky-100 text-sm sm:text-base leading-relaxed">
+                        Hệ thống 40 câu hỏi chuẩn hóa 100% nội dung SGK (30 Trắc nghiệm + 10 Đúng/Sai) phân cấp độ Dễ - Trung Bình - Khó giúp bạn bứt phá điểm số!
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="startQuiz('all')" class="px-6 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 font-bold text-slate-900 shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <i class="fa-solid fa-play"></i>
+                            Bắt Đầu Ôn Tập Toàn Bộ (40 Câu)
+                        </button>
+                        <button onclick="startQuiz('mcq')" class="px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 font-bold text-white border border-white/30 backdrop-blur-md transition flex items-center gap-2">
+                            <i class="fa-solid fa-list-check"></i>
+                            Chỉ Trắc Nghiệm (30 Câu)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div class="glass-card p-5 rounded-2xl flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-semibold">Điểm Cao Nhất</p>
+                        <h3 id="stat-high-score" class="text-xl sm:text-2xl font-black text-slate-800">0 / 40</h3>
+                    </div>
+                </div>
+                <div class="glass-card p-5 rounded-2xl flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-semibold">Tỷ Lệ Chính Xác</p>
+                        <h3 id="stat-accuracy" class="text-xl sm:text-2xl font-black text-slate-800">0%</h3>
+                    </div>
+                </div>
+                <div class="glass-card p-5 rounded-2xl flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-semibold">Số Lần Luyện Tập</p>
+                        <h3 id="stat-attempts" class="text-xl sm:text-2xl font-black text-slate-800">0</h3>
+                    </div>
+                </div>
+                <
